@@ -1,1 +1,1 @@
-# TIN1
+JavaScript (JS) website using EJS and CSS

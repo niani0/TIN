@@ -1,0 +1,80 @@
+<%- include ../../fragments/headerClient %>
+
+        <main>
+            <h2><%= pageTitle %></h2>   
+            <form  class="form" method="post" action="<%= formAction %>" novalidate> <!-- onsubmit="return validateForm();" -->
+                <input type="hidden" name="id" value="<%= client.id %>">
+
+                <label for="name">Imię: <span class="symbol-required">*</span></label>
+                <input type="text" name="name" id="name" placeholder="2-60 znaków" value="<%= client.name %>" class="<%= validationErrors.find(e => e.path.includes('name')) ? 'error-input' : '' %>"
+                <%= (formMode == 'showDetails') ? 'disabled' : '' %> />
+                <span id="errorname" class="errors-text" >
+                    <% if (validationErrors.find(e => e.path.includes('name'))) {%>
+                        <%= validationErrors.find(e => e.path.includes('name')).message %>
+                    <% } %>
+                </span>
+
+                <label for="congomen">Nazwisko: <span class="symbol-required">*</span></label>
+                <input type="text" name="congomen" id="congomen" placeholder="2-60 znaków" value="<%= client.congomen %>" class="<%= validationErrors.find(e => e.path.includes('congomen')) ? 'error-input' : '' %>"
+                <%= (formMode == 'showDetails') ? 'disabled' : '' %> />
+                <span id="errorcongomen" class="errors-text">
+                    <% if (validationErrors.find(e => e.path.includes('congomen'))) {%>
+                        <%= validationErrors.find(e => e.path.includes('congomen')).message %>
+                    <% } %>
+                </span>
+
+                <label for="company">Nazwa firmy: <span class="symbol-required">*</span></label>
+                <input type="text" name="company" id="company" placeholder="1-60 znaków" value="<%= client.company %>" class="<%= validationErrors.find(e => e.path.includes('company')) ? 'error-input' : '' %>"
+                <%= (formMode == 'showDetails') ? 'disabled' : '' %> />
+                <span id="errorcompany" class="errors-text">
+                    <% if (validationErrors.find(e => e.path.includes('company'))) {%>
+                        <%= validationErrors.find(e => e.path.includes('company')).message %>
+                    <% } %>
+                </span>
+
+            
+
+            <% if (formMode == 'showDetails') { %>
+                <div class ="selection-buttons">
+                    <a href = "/clients/edit/<%= client.id %>" class="list-actions-button-edit">Edytuj</a> 
+                </div>
+                <p><p>
+                <% } %>
+            <% if (formMode == 'showDetails' || formMode =='edit') { %> 
+                
+                <h2>Szczegóły zamówień klienta</h2>
+                
+                <p><p><table class="table-list">
+                    <thead>
+                        <tr>
+                            <th>Nazwa dostawcy</th>
+                            <th>Email dostawcy</th>
+                            <th>Data zamówienia</th>
+                            <th>Data dostawy</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for (let c of client.orders) { %>
+                            <tr>
+                                <td><a href="/suppliers/details/<%= c.supplier.id %>"><%= c.supplier.name %></a></td>
+                                <td><%= c.supplier.email %></td>
+                                <td><%= c.order_date.toISOString().split('T')[0] %></td>
+                                <td><%= c.delivery_date ? c.delivery_date.toISOString().split('T')[0] : '' %></td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+                <% } %>
+            
+            <div class="form-buttons">
+                <p id="errorSummary" class="errors-text"></p>
+                <% if (formMode != 'showDetails') { %>
+                    <input class="form-button-submit" type="submit" value="<%=btnLabel%>">
+                    <a href="/clients" class="form-button-cancel">Anuluj</a>
+                <% } else { %>
+                    <a href="/clients" class="form-button-cancel">Powrót</a>
+                <% } %>
+            </div>
+        </form>
+        </main>
+<%- include ../../fragments/footer.ejs  %>

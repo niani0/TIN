@@ -1,0 +1,55 @@
+<%- include('../../fragments/headerOrder.ejs') %>
+        <main>
+            <h2><%= pageTitle %></h2>
+            <form  class="form" method="post" action="<%= formAction %>" novalidate><!-- onsubmit="return validateForm();" -->
+                <input type="hidden" name="id" value="<%= order.id %>">
+
+                <label for="supplier_id">Dostawca:</label>
+                <select name="supplier_id" id="supplier_id" required <%= (formMode == 'showDetails') ? 'disabled' : ''%> >
+                    <option value="" selected>--Wybierz Id Dostawcy--</option>
+                    <% for (let i=0; i<allSupps.length; i++ ) {let sup = allSupps[i]; %>
+                    <option value="<%= sup.id %>" label="<%= sup.name + ' ' + sup.email %> "
+                    <%= (order.id && sup.id.toString() == order.supplier.id.toString()) ? 'selected' : ''%>></option>
+                    <%}%>
+                </select>
+                <span id="errorsupplier_id" class="errors-text"></span>
+
+                <label for="client_id">Dostawca:</label>
+                <select name="client_id" id="client_id" required <%= (formMode == 'showDetails') ? 'disabled' : ''%> >
+                    <option value="" selected>--Wybierz Id Klienta--</option>
+                    <% for (let i=0; i<allClis.length; i++ ) {let cli = allClis[i]; %>
+                    <option value="<%= cli.id %>" label="<%= cli.name + ' ' + cli.congomen %> "
+                    <%= (order.id && cli.id.toString() == order.client.id.toString()) ? 'selected' : ''%>></option>
+                    <%}%>
+                </select>
+                <span id="errorclient_id" class="errors-text"></span>
+                
+                <label for="order_date">Data Zamówienia: <span class="symbol-required">*</span></label>
+                <input type="date" name="order_date" id="order_date" value="<%= order.order_date ? order.order_date.toISOString().split('T')[0] : '' %>"
+                <%= (formMode == 'showDetails') ? 'disabled' : '' %> />
+                <span id="errororder_date" class="errors-text"></span>
+
+                <label for="delivery_date">Data Dostawy: </label>
+                <input type="date" name="delivery_date" id="delivery_date" value="<%= order.delivery_date ? order.delivery_date.toISOString().split('T')[0] : '' %>"
+                <%= (formMode == 'showDetails') ? 'disabled' : '' %> />
+                <span id="errordelivery_date" class="errors-text"></span>
+
+                <% if (formMode == 'showDetails') { %>
+                    <div class ="selection-buttons">
+                        <a href = "/orders/edit/<%= order.id %>" class="list-actions-button-edit">Edytuj</a> 
+                    </div>
+                    <p><p>
+                    <% } %>
+
+                <div class="form-buttons">
+                    <p id="errorSummary" class="errors-text"></p>
+                    <% if (formMode != 'showDetails') {%>
+                        <input type="submit" class="form-button-submit" value="<%=btnLabel%>">
+                        <a href="/orders" class="form-button-cancel">Anuluj</a>
+                    <% } else { %>
+                        <a href="/orders" class="form-button-cancel">Powrót</a>
+                    <% } %>
+                </div>
+            </form>
+        </main>
+        <%- include('../../fragments/footer.ejs') %>

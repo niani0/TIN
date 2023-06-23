@@ -1,0 +1,40 @@
+<%- include('../../fragments/header.ejs') %>
+        <main>
+            <h2>Lista zamówień</h2>
+            <table class="table-list">
+                <thead>
+                    <tr>
+                        <th>Id Dostawcy</th>
+                        <th>Id Klienta</th>
+                        <th>Data zamówienia</th>
+                        <th>Data dostawy</th>
+                        <th>Akcje</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (let order of orders) { %>
+                    <tr>
+                        <td><%= order.supplier_id %></td>
+                        <td><%= order.client_id %></td>
+                        <td><%= order.order_date.toISOString().split('T')[0] %></td>
+                        <td><%= order.delivery_date ? order.delivery_date.toISOString().split('T')[0] : '' %></td>
+                        <td>
+                            <ul class="list-actions">
+                                <li>
+                                    <a href="orders/details/<%=order.id%>" class="list-actions-button-details">Szczegóły</a>
+                                </li>
+                                <li>
+                                    <a href="orders/edit/<%=order.id%>" class="list-actions-button-edit">Edytuj</a>
+                                </li>
+                                <li>
+                                    <a href="orders/delete/<%=order.id%>" class="list-actions-button-delete">Usuń</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+            <p><a href="orders/add" class="button-add">Dodaj nowe zamówienie</a></p>
+        </main>
+        <%- include('../../fragments/footer.ejs') %>
